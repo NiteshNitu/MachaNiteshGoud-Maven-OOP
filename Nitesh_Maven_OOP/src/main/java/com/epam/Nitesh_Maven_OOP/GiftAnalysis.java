@@ -24,9 +24,9 @@ public class GiftAnalysis {
 		ArrayList<Chocolate> chocolates = new ArrayList<Chocolate>();
 		ArrayList<Candie> candies = new ArrayList<Candie>();
 		
-    	Chocolate c = new Chocolate("Milkybar", 30, 20);
-    	chocolates.add(c);
-    	c = new Chocolate("Cadbury Temptation", 85, 72);
+		Chocolate c = new Chocolate("Cadbury Temptation", 85, 72);
+		chocolates.add(c);
+    	c = new Chocolate("Milkybar", 30, 20);
     	chocolates.add(c);
     	c = new Chocolate("Kreitens Almond Toffee", 220, 250);
     	chocolates.add(c);
@@ -35,9 +35,9 @@ public class GiftAnalysis {
         
         Candie cd = new Candie("Dilkhush Orange Candy", 100, 150);
     	candies.add(cd);
-    	cd = new Candie("Kismi Parle", 50, 95);
-    	candies.add(cd);
     	cd = new Candie("Krey Mix Fruit", 30, 60);
+    	candies.add(cd);
+    	cd = new Candie("Kismi Parle", 50, 95);
     	candies.add(cd);
 
         sweets.addCandies(candies);
@@ -98,28 +98,38 @@ public class GiftAnalysis {
 	void getChocolates(Sweet sweets, int type) {
 		ArrayList<Chocolate> chocolates = sweets.getChocolates();
 		
-		if(type == 1) {
-			Collections.sort(chocolates, Collections.reverseOrder());
+		switch(type) {
+			case 1:
+				Collections.sort(chocolates, Collections.reverseOrder());
+				sweets.printChocolates();
+				break;
+			case 2:
+				Collections.sort(chocolates);
+				sweets.printChocolates();
+				break;
+			default:
+				System.out.println("Invalid Choice...");
 		}
-		else {
-			Collections.sort(chocolates);
-		}
-		sweets.printChocolates();
+		
 	}
 	
 	void getCandies(Sweet sweets, int type) {
 		ArrayList<Candie> candies = sweets.getCandies();
-		if(type == 1) {
-			Collections.sort(candies, Collections.reverseOrder());
-			for(Candie candie: candies) {
-				System.out.println(candie.toString());
-			}
-		}
-		else {
-			Collections.sort(candies);
-			for(Candie candie: candies) {
-				System.out.println(candie.toString());
-			}
+		switch(type) {
+			case 1:
+				Collections.sort(candies, Collections.reverseOrder());
+				for(Candie candie: candies) {
+					System.out.println(candie.toString());
+				}
+				break;
+			case 2:
+				Collections.sort(candies);
+				for(Candie candie: candies) {
+					System.out.println(candie.toString());
+				}
+				break;
+			default:
+				System.out.println("Invalid Choice...");
 		}
 		
 	}
@@ -128,41 +138,60 @@ public class GiftAnalysis {
 		ArrayList<Chocolate> chocolates = sweet.getChocolates();
 		ArrayList<Candie> candies = sweet.getCandies();
 		
-		if(type == 1) {
-			int totalCost = 0;
-			System.out.println("	Chocolates in range [" + lower_bound + ", " + upper_bound + "] cost:	");
-			for(Chocolate choco: chocolates) {
-				if(choco.cost >= lower_bound && choco.cost <= upper_bound) {
-					System.out.println(choco.toString());
-					totalCost += choco.cost;
+		switch(type) {
+			case 1:
+				// print all the chocolates and candies with cost X such that (lower_bound <= X <= upper_bound)
+				int totalChocolatesCost = 0, totalCandiesCost = 0;
+				System.out.println("	Chocolates in range [" + lower_bound + ", " + upper_bound + "] cost:\n");
+				for(Chocolate choco: chocolates) {
+					if(choco.cost >= lower_bound && choco.cost <= upper_bound) {
+						System.out.println(choco.toString());
+						totalChocolatesCost += choco.cost;
+					}
 				}
-			}
-			System.out.println("	Candies in range [" + lower_bound + ", " + upper_bound + "] cost:");
-			for(Candie candie: candies) {
-				if(candie.cost >= lower_bound && candie.cost <= upper_bound) {
-					System.out.println(candie.toString());
-					totalCost += candie.cost;
+				if(totalChocolatesCost == 0) {
+					System.out.println("No Chocolates in the given range ");
 				}
-			}
-			System.out.println("Total Cost of Sweets = ₹" + totalCost + " /-\n");
-		}
-		else {
-			int totalWeight = 0;
-			System.out.println("	Chocolates in range [" + lower_bound + ", " + upper_bound + "] weight(in grams)	");
-			for(Chocolate choco: chocolates) {
-				if(choco.weight >= lower_bound && choco.weight <= upper_bound) {
-					System.out.println(choco.toString());
-					totalWeight += choco.weight;
+				System.out.println("	Candies in range [" + lower_bound + ", " + upper_bound + "] cost:\n");
+				for(Candie candie: candies) {
+					if(candie.cost >= lower_bound && candie.cost <= upper_bound) {
+						System.out.println(candie.toString());
+						totalCandiesCost += candie.cost;
+					}
 				}
-			}
-			System.out.println("	Candies in range [" + lower_bound + ", " + upper_bound + "] weight(in grams):\n");
-			for(Candie candie: candies) {
-				if(candie.weight >= lower_bound && candie.weight <= upper_bound) {
-					System.out.println(candie.toString());
-					totalWeight += candie.weight;
+				if(totalCandiesCost == 0) {
+					System.out.println("No Candies in the given range ");
 				}
-			}
-			System.out.println("Total Weight of Sweets = " + totalWeight + "grams\n");
+				if(totalCandiesCost > 0 && totalChocolatesCost > 0)
+					System.out.println("Total Cost of Sweets = ₹" + String.valueOf(totalCandiesCost + totalChocolatesCost) + " /-\n");
+				break;
+			case 2:
+				// print all the chocolates and candies with weight X such that (lower_bound <= X <= upper_bound) 
+				int totalChocolatesWeight = 0, totalCandiesWeight = 0;
+				System.out.println("	Chocolates in range [" + lower_bound + ", " + upper_bound + "] weight(in grams)\n");
+				for(Chocolate choco: chocolates) {
+					if(choco.weight >= lower_bound && choco.weight <= upper_bound) {
+						System.out.println(choco.toString());
+						totalChocolatesWeight += choco.weight;
+					}
+				}
+				if(totalChocolatesWeight == 0) {
+					System.out.println("No Chocolates in the given range ");
+				}
+				System.out.println("	Candies in range [" + lower_bound + ", " + upper_bound + "] weight(in grams):\n");
+				for(Candie candie: candies) {
+					if(candie.weight >= lower_bound && candie.weight <= upper_bound) {
+						System.out.println(candie.toString());
+						totalCandiesWeight += candie.weight;
+					}
+				}
+				if(totalCandiesWeight == 0) 
+					System.out.println("No Candies in the given range \n");
+				if(totalCandiesWeight > 0 && totalChocolatesWeight > 0) 
+					System.out.println("Total Weight of Sweets = " + String.valueOf(totalCandiesWeight + totalChocolatesWeight) + " grams\n");
+				break;
+			default:
+				System.out.println("Invalid Choice...");
 		}
 	}
 }
